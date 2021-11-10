@@ -1,0 +1,44 @@
+{% include 'base.html.twig' %}
+
+{% block body %}
+	<!DOCTYPE html>
+	<html>
+
+		<head>
+			<meta charset="UTF-8">
+			<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></head>
+	</html>
+</head>
+<style></style>
+
+<body>
+
+	<header class="py-5 bg-image-full" style="background-image: url('http://www.angelxp.eu/image/Twitter/art/bleu06.jpg')">
+            <div class="text-center my-5">
+                <img class="img-fluid rounded-circle mb-4" style="width:200px;height:150px;" src="https://assets-global.website-files.com/60229d0e0f4cf7393c63e573/60c9fffcf549630a275f8e7c_template-vignette-HACKATHON-1200x900-EN.png.png" alt="..." />
+                <h1 class="text-white fs-3 fw-bolder">HackatWeb</h1>
+                <p class="text-white-50 mb-0">Page d'Accueil</p>
+            </div>
+        </header>
+
+		<section class="py-5">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Junction_2015.jpg/1200px-Junction_2015.jpg" class="image" style="float:left;width: 500px;border-radius: 8px;margin-left: 10%;margin-top: 1%;">
+            <div class="container my-5">
+            
+                <div class="row justify-content-center">
+                    <div class="col-lg-9">
+                        <h2>Un hackathon qu'est-ce que c'est ?</h2>
+                        <p class="lead">Un hackathon est un processus créatif utilisé dans le domaine de l'innovation numérique. Durant généralement un week-end, des développeurs volontaires se réunissent pour faire de la programmation informatiqueen mode collaboratif surun thèmedéfini. L’engouement pour ce type de manifestation témoigne d’une volonté de développer toujours davantage le numérique au service de la société.</p>
+                        <a href="inscription" id="myHref">Cliquez ici pour vous inscrire.</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+</body>
+
+</html>
+
+{% include 'footer.html.twig' %}
+
+{% endblock %}
