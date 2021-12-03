@@ -7,28 +7,106 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Participer
  *
- * @ORM\Table(name="participer", indexes={@ORM\Index(name="I_FK_PARTICIPER_PARTICIPANTS", columns={"ID"}), @ORM\Index(name="I_FK_PARTICIPER_INITIATION", columns={"ID_1"})})
+ * @ORM\Table(name="participer", indexes={@ORM\Index(name="ID_HackaP", columns={"ID_HackaP"}), @ORM\Index(name="ID_ParticiP", columns={"ID_ParticiP"})})
  * @ORM\Entity
  */
 class Participer
 {
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="ID", type="string", length=32, nullable=false, options={"fixed"=true})
+     * @ORM\Column(name="ID", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="ID_1", type="string", length=32, nullable=false, options={"fixed"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="NumInscri", type="integer", nullable=false)
      */
-    private $id1;
+    private $numinscri;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="DateSaisie", type="date", nullable=false)
+     */
+    private $datesaisie;
+
+    /**
+     * @var \App\Entity\Participant
+     *
+     * @ORM\ManyToOne(targetEntity="Participant")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ID_ParticiP", referencedColumnName="ID_Participants")
+     * })
+     */
+    private $idParticip;
+
+    /**
+     * @var \App\Entity\Hackathon
+     *
+     * @ORM\ManyToOne(targetEntity="Hackathon")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ID_HackaP", referencedColumnName="ID_Hackathon")
+     * })
+     */
+    private $idHackap;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNuminscri(): ?int
+    {
+        return $this->numinscri;
+    }
+
+    public function setNuminscri(int $numinscri): self
+    {
+        $this->numinscri = $numinscri;
+
+        return $this;
+    }
+
+    public function getDatesaisie(): ?\DateTimeInterface
+    {
+        return $this->datesaisie;
+    }
+
+    public function setDatesaisie(\DateTimeInterface $datesaisie): self
+    {
+        $this->datesaisie = $datesaisie;
+
+        return $this;
+    }
+
+    public function getIdParticip(): ?Participant
+    {
+        return $this->idParticip;
+    }
+
+    public function setIdParticip(?Participant $idParticip): self
+    {
+        $this->idParticip = $idParticip;
+
+        return $this;
+    }
+
+    public function getIdHackap(): ?Hackathon
+    {
+        return $this->idHackap;
+    }
+
+    public function setIdHackap(?Hackathon $idHackap): self
+    {
+        $this->idHackap = $idHackap;
+
+        return $this;
+    }
 
 
 }

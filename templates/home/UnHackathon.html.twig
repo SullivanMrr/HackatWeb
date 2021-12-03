@@ -1,0 +1,23 @@
+{% include 'base.html.twig' %}
+
+{% block body %}
+	
+<div class="card">
+            
+                <div class="card-body" style="text-align:center;">
+              Thème :  <font color ="#2897df"> <h5 class="card-title">{{Hackathon.theme}}</h5></font>
+              Ville :  <p class="card-text">{{Hackathon.ville}}</p>
+              Date de début :  <p class="card-text">{{Hackathon.datedebut|date('d/m/y')}}</p>
+              Heure de début :  <p class="card-text">{{Hackathon.heuredebut|date('H:i')}}</p>
+              Date de fin :  <p class="card-text">{{Hackathon.datefin|date('d/m/y')}}</p>
+              Heure de fin :  <p class="card-text">{{Hackathon.heurefin|date('H:i')}}</p>
+              Lieu :  <p class="card-text">{{Hackathon.lieu}}</p>
+              Rue :  <p class="card-text">{{Hackathon.rue}}</p>
+              Code postal :  <p class="card-text">{{Hackathon.codepostal}}</p>
+              Date limite :  <p class="card-text">{{Hackathon.datelimite|date('d/m/y')}}</p>
+              Nombre de places :  <p class="card-text">{{Hackathon.nbplaces}}</p>  
+              Nombre de places restantes :  <p class="card-text">{{Hackathon.nbplaces}}</p>
+            </div>
+            
+{% endblock %}
+{% include 'footer.html.twig' %}
