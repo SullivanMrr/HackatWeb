@@ -4,7 +4,6 @@ namespace App\Service;
 use App\Entity\Hackathon;
 use App\Entity\Initiation;
 use PDO;
-use App\Entity\Series;
 
 class PdoHackatWeb 
 {
@@ -30,7 +29,6 @@ class PdoHackatWeb
         PdoHackatWeb::$monPdo->query("SET CHARACTER SET utf8");
     }
 
-    
 
     public function getLesHackathons(){
         $req =  PdoHackatWeb::$monPdo->prepare("select * from  Hackathon");
@@ -67,7 +65,8 @@ class PdoHackatWeb
 		$req->execute();
     }
 
-    public function setAtelier($user){
+
+    public function sette($user){
         
       $req =  PdoHackatWeb::$monPdo->prepare("insert into participer(ID_Participer, Password) values(:mail, :password)");
       $req->bindValue(':mail', $user['mail']);
@@ -89,6 +88,4 @@ class PdoHackatWeb
         
 		return $ateliers;
     }
-
-
 }
