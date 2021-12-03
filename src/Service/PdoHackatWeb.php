@@ -4,7 +4,6 @@ namespace App\Service;
 use App\Entity\Hackathon;
 use App\Entity\Initiation;
 use PDO;
-use App\Entity\Series;
 
 class PdoHackatWeb 
 {
@@ -66,6 +65,16 @@ class PdoHackatWeb
         dump($req);
 		$req->execute();
     }
+
+
+    public function setAtelier($user){
+        
+      $req =  PdoHackatWeb::$monPdo->prepare("insert into participer(ID_Participer, Password) values(:mail, :password)");
+      $req->bindValue(':mail', $user['mail']);
+      $req->bindValue(':password', $user['password']);
+      dump($req);
+  $req->execute();
+  }
 
     public function getLesAteliersHacka($id){
         $req =  PdoHackatWeb::$monPdo->prepare("select * from evenements Inner join hackathon ON hackathon.ID_hackathon = evenements.ID_HackaE where ID_HackaE= :id");
