@@ -8,18 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
  * Hackathon
  *
  * @ORM\Table(name="hackathon")
- * @ORM\Entity(repositoryClass=App\Repository\HackatonRepository::class)
+ * @ORM\Entity
  */
 class Hackathon
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="ID_Hackathon", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private $idHackathon;
 
     /**
      * @var \DateTime
@@ -98,9 +98,9 @@ class Hackathon
      */
     private $nbplaces;
 
-    public function getId(): ?int
+    public function getIdHackathon(): ?int
     {
-        return $this->id;
+        return $this->idHackathon;
     }
 
     public function getDatedebut(): ?\DateTimeInterface

@@ -66,8 +66,7 @@ class PdoHackatWeb
     }
 
 
-    public function sette($user){
-        
+    public function setAtelier($user){
       $req =  PdoHackatWeb::$monPdo->prepare("insert into participer(ID_Participer, Password) values(:mail, :password)");
       $req->bindValue(':mail', $user['mail']);
       $req->bindValue(':password', $user['password']);
