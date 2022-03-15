@@ -1,22 +1,29 @@
+<!DOCTYPE html>
 {% include 'base.html.twig' %}
-{% block body %}
 
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Document</title>
+	</head>
+	{% block body %}
 
+		{% if app.user %}
+			{% else %}
+				Veuillez vous connecter pour pouvoir vous inscrire à un hackathon
 
+				{% if Hackathon.datelimite > 'now'|date('d - m -Y') %}
+					{% else %}
+						Vous ne pouvez plus vous inscrire à cet hackathon
+						{% if Hackathon.nbplaces > 50  %}
+							{% else %}
+								Il n'y a plus de places dans cet hackathon
+						{% endif %}
+                {% endif %}
+        {% endif %}
 
- {% if app.user %}
- 
-    {% else %}
-Veuillez cous connecter pour pouvoir vous inscrire à un hackathon
-
-
-
-
-
-
-
-
-
-{% endif %}
-{% endblock %} 
+    {% endblock %}
 {% include 'footer.html.twig' %}
+</html>

@@ -7,12 +7,16 @@ use App\Entity\Evenements;
 use App\Entity\Hackathon;
 use App\Entity\Initiation;
 use App\Entity\Participant;
+use App\Entity\Participer;
 use App\Form\RegistrationFormType;
+use App\Repository\HackatonRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class HomeController extends AbstractController
@@ -28,14 +32,15 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/Hackathon", name="ListeHack")
+     * @Route("/Hackaton", name="ListeHack")
      */
 
-    public function Afficherhack()
+    public function Afficherhack(HackatonRepository $hackatonRepository)
     {
         $repository = $this->getDoctrine()->getRepository(Hackathon::class);
         $lesHackathons = $repository->findAll();
-        return $this->render('home/Hackathon.html.twig', ['lesHackathons' => $lesHackathons, 'lesVilles' => $lesHackathons]);
+        $lesVilles = $hackatonRepository->distinctVille();
+        return $this->render('home/Hackathon.html.twig', ['lesHackathons' => $lesHackathons, 'lesVilles' => $lesVilles]);
     }
     /**
      * @Route("/Hackathon/{id}", name="ListeUnHack")
@@ -57,7 +62,7 @@ class HomeController extends AbstractController
     {
         $repository = $this->getDoctrine()->getRepository(Hackathon::class);
         $lesHackathons = $repository->findBy(array('ville' => $ville));
-        return $this->render('home/HackathonVilleTes.html.twig', ['lesHackathons' => $lesHackathons]);
+        return $this->render('home/HackathonVille.html.twig', ['lesHackathons' => $lesHackathons]);
     }
     /**
      * @Route("/connexion", name="connexion")
@@ -90,7 +95,7 @@ class HomeController extends AbstractController
             $entityManager->persist($participant);
             $entityManager->flush();
 
-            
+            return $this->redirectToRoute('security_login');
         }
 
         return $this->render('authentification/inscription.html.twig', [
@@ -98,10 +103,11 @@ class HomeController extends AbstractController
         ]);
     }
 
- /**
+    /**
      * @Route("/getHackathon", name="getHackathon", methods="GET")
      */
-    public function getHackathon(){
+    public function getHackathon()
+    {
         $serializer = $this->get('serializer');
         $repository = $this->getDoctrine()->getRepository(Hackathon::class);
         $products = $repository->findAll();
@@ -109,19 +115,33 @@ class HomeController extends AbstractController
         return new Response($json);
     }
     /**
-     * @Route("/getAtelier/{idHackae}", name="getAtelier", methods="GET")
+     * @Route("/getLesAteliers", name="getLesAteliers", methods="GET")
      */
-    public function getAtelier($idHackae){
+    public function getLesAteliers()
+    {
         $serializer = $this->get('serializer');
         $repository = $this->getDoctrine()->getRepository(Evenements::class);
-        $products = $repository->findBy(['idHackae'=>$idHackae ]);
+        $products = $repository->findAll();
+        $json = $serializer->serialize($products, 'json');
+        return new Response($json);
+    }
+
+    /**
+     * @Route("/getAtelier/{idHackae}", name="getAtelier", methods="GET")
+     */
+    public function getAtelier($idHackae)
+    {
+        $serializer = $this->get('serializer');
+        $repository = $this->getDoctrine()->getRepository(Evenements::class);
+        $products = $repository->findBy(['idHackathon' => $idHackae]);
         $json = $serializer->serialize($products, 'json');
         return new Response($json);
     }
     /**
      * @Route("/getConference", name="getConference", methods="GET")
      */
-    public function getConference(){
+    public function getConference()
+    {
         $serializer = $this->get('serializer');
         $repository = $this->getDoctrine()->getRepository(Conference::class);
         $products = $repository->findAll();
@@ -129,11 +149,64 @@ class HomeController extends AbstractController
         return new Response($json);
     }
     /**
-     * @Route("/InscriptionHackathon", name="InscriptionHackathon")
+     * @Route("/InscriptionHackathon/{id}", name="InscriptionHackathon")
      */
-    public function InscripHackat(): Response
-   
+    public function InscripHackat($id): Response
     {
-        return $this->render('home/InscriptionHackathon.html.twig',[ 'controller_name' => 'HomeController', ]);
+        $repository = $this->getDoctrine()->getRepository(Hackathon::class);
+        $leHackathon = $repository->find($id);
+        $date = new \DateTime('now');
+        $datelimite = $leHackathon->getdateLimite();
+
+        $user = $this->getUser();
+
+        if ($datelimite->format('Y-m-d') < $date->format('Y-m-d')) {
+
+            $this->addFlash('error', "Date limite dépassée !");
+            return $this->redirectToRoute('ListeHack');
+        } elseif ($leHackathon->getnbPlaces() == 0) {
+
+            $this->addFlash('error', "Il n'y a plus de place dans cet hackathon.");
+            return $this->redirectToRoute('ListeHack');
+        } elseif ($user == null) {
+            $this->addFlash('error', "Veuillez vous connectez pour vous inscrire à un hackathon  !");
+            return $this->redirectToRoute('ListeHack');
+        } elseif ($this->getDoctrine()->getRepository(Participer::class)->findOneBy(array('idParticipant' => $user->getIdParticipant(), 'idHackathon' => $leHackathon->getIdHackathon())) !== null) {
+
+            $this->addFlash('error', "Vous êtes déjà inscrit à cet Hackathon !");
+            return $this->redirectToRoute('ListeHack');
+        } elseif (empty($_POST['description'])) {
+            
+            $this->addFlash('error', "Vous devez remplir le champ description");
+            return $this->redirectToRoute('ListeHack');
+        } else {
+            
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $participer = new Participer();
+
+            $participer->setIdParticipant($user->getId());
+            $participer->setIdHackathon($leHackathon->getIdHackathon());
+            $participer->setDateinscription(new DateTime('now'));
+            $participer->setDescription($_POST['description']);
+            
+            
+            // $participer->setNuminscri($numInscri);
+
+            $leHackathon->setNbPlaces($leHackathon->getNbPlaces() - 1);
+
+            $entityManager->persist($participer);
+            $entityManager->flush();
+
+
+            $this->addFlash('success', "Vous vous êtes inscrit à cet Hackathon avec succès");
+            return $this->redirectToRoute('ListeHack');
+        }
+
+
+
+
+
+        return $this->render('home/InscriptionHackathon.html.twig', ['Hackathon' => $leHackathon]);
     }
 }

@@ -33,7 +33,7 @@ class ApiController extends AbstractController
         $tabJSON = [];
         foreach ($hackathons as $unHackathon) {
             $tabJSON[] = [
-                'id' => $unHackathon->getId(),
+                'id' => $unHackathon->getIdHackathon(),
                 'theme' => $unHackathon->getTheme(),
                 'datedebut' => $unHackathon->getDatedebut(),
                 'datefin' => $unHackathon->getDatefin(),
@@ -73,17 +73,68 @@ class ApiController extends AbstractController
                 'mail' => $tabDonnees->mail,
                 'dateNaiss' => $tabDonnees->dateNaiss,
                 'numTel' => $tabDonnees->numTel,
-                'Portfolio' => $tabDonnees->Portfolio,
+                'portfolio' => $tabDonnees->Portfolio,
                 'password' =>$tabDonnees->Password
             ];
+
            // $user = new Participant($tabDonnees);
 
             $monPdo->setUser($user);
+            
+        }
+
+        return new JsonResponse($tabDonnees, Response::HTTP_CREATED);
+    }
+    /**
+     * @Route("/newParticiper", name="api_participer", methods="POST")
+     */
+    public function newParticiper(Request $request, PdoHackatWeb $monPdo)
+    {
+
+        $content = $request->getContent();
+        
+        if (!empty($content)) {
+
+            $tabDonnees = json_decode($request->getContent());
+            
+            $user = [
+                'ID_HACKATHON' =>$tabDonnees->ID_HACKATHON,
+                'ID_PARTICIPANT' =>$tabDonnees->ID_PARTICIPANT,
+                'DATEINSCRIPTION' => $tabDonnees->DATEINSCRIPTION,
+                'DESCRIPTION' => $tabDonnees->DESCRIPTION,
+                
+            ];
+
+           // $user = new Participant($tabDonnees);
+           dump($user); 
+           $monPdo->setParticiper($user);
+            dump($user);
         }
 
         return new JsonResponse($tabDonnees, Response::HTTP_CREATED);
     }
 
+
+    
+
+    /**
+     * @Route("/Hackathon", name="getLesVilles", methods="GET")
+     */
+    public function getLesVilles(PdoHackatWeb $monPdo): JsonResponse
+    {
+        $villes = $monPdo->getLesVilles();
+        $tabJSON = [];
+        foreach ($villes as $uneVille) {
+            $tabJSON[] = [
+                'ville' => $uneVille->getVille(),
+            ];
+        }
+        dump($tabJSON);
+        $var = new JsonResponse($tabJSON);
+        dump($var);
+        return $var;
+    }
+    
     /**
      * @Route("/getLesAteliersHacka", name="getLesAteliersHacka", methods="GET")
      */
@@ -93,18 +144,18 @@ class ApiController extends AbstractController
         $tabJSON = [];
         foreach ($ateliers as $unAtelier) {
             $tabJSON[] = [
-                'ParticipantsLimite' => $unAtelier->getParticipantslimite(),
+               
                 'Libelle' => $unAtelier->getLibelle(),
-                'DateEven' => $unAtelier->getDateeven(),
+                'Date' => $unAtelier->getDate(),
                 'Heure' => $unAtelier->getHeure(),
                 'Duree' => $unAtelier->getDuree(),
                 'Salle' => $unAtelier->getSalle(),
             ];
         }
-        dump($tabJSON);
+        dump($unAtelier->getLibelle());
         $var = new JsonResponse($tabJSON);
-        dump($var);
         return $var;
     }
     
+
 }

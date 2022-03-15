@@ -2,90 +2,103 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Participant
  *
  * @ORM\Table(name="participant")
  * @ORM\Entity
- * @UniqueEntity("mail",message="Adresse Email déjà utilisé.")
  */
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_Participants", type="integer", nullable=false)
+     * @ORM\Column(name="ID_PARTICIPANT", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idParticipants;
+    private $idParticipant;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Nom", type="string", length=50, nullable=true)
+     * @ORM\Column(name="NOM", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $nom;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Prenom", type="string", length=50, nullable=true)
+     * @ORM\Column(name="PRENOM", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $prenom;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Mail", type="string", length=100, nullable=true, unique=true)
-     * @Assert\Email     
+     * @ORM\Column(name="MAIL", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $mail;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="DateNaiss", type="date", nullable=true)
+     * @ORM\Column(name="DATENAISS", type="date", nullable=true)
      */
     private $datenaiss;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Portofolio", type="string", length=100, nullable=true)
+     * @ORM\Column(name="PORTFOLIO", type="string", length=255, nullable=true, options={"fixed"=true})
      */
-    private $portofolio;
+    private $portfolio;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="NumTel", type="integer", nullable=true)
+     * @ORM\Column(name="NUMTEL", type="integer", nullable=true)
      */
     private $numtel;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Login", type="string", length=50, nullable=true)
+     * @ORM\Column(name="LOGIN", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $login;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Password", type="string", length=225, nullable=true)
+     * @ORM\Column(name="PASSWORD", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $password;
 
-    public function getIdParticipants(): ?int
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="ROLES", type="string", length=32, nullable=true, options={"fixed"=true})
+     */
+    private $roles;
+
+    public function getIdParticipant(): ?int
     {
-        return $this->idParticipants;
+        return $this->idParticipant;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->idParticipant;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->idParticipant;
     }
 
     public function getNom(): ?string
@@ -136,14 +149,14 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPortofolio(): ?string
+    public function getPortfolio(): ?string
     {
-        return $this->portofolio;
+        return $this->portfolio;
     }
 
-    public function setPortofolio(?string $portofolio): self
+    public function setPortfolio(?string $portfolio): self
     {
-        $this->portofolio = $portofolio;
+        $this->portfolio = $portfolio;
 
         return $this;
     }
@@ -171,54 +184,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
     /**
-     * @see PasswordAuthenticatedUserInterface
+     * @see UserInterface
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
-        return $this->password;
+        return (string) $this->password;
     }
 
-    public function setPassword(?string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
 
         return $this;
     }
@@ -241,5 +218,29 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->idParticipant;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 }

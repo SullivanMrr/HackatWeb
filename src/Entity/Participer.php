@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Participer
  *
- * @ORM\Table(name="participer", indexes={@ORM\Index(name="ID_HackaP", columns={"ID_HackaP"}), @ORM\Index(name="ID_ParticiP", columns={"ID_ParticiP"})})
+ * @ORM\Table(name="participer", indexes={@ORM\Index(name="I_FK_PARTICIPER_HACKATHON", columns={"ID_HACKATHON"}), @ORM\Index(name="I_FK_PARTICIPER_PARTICIPANT", columns={"ID_PARTICIPANT"})})
  * @ORM\Entity
  */
 class Participer
@@ -15,95 +15,98 @@ class Participer
     /**
      * @var int
      *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="ID_HACKATHON", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $id;
+    private $idHackathon;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="NumInscri", type="integer", nullable=false)
+     * @ORM\Column(name="ID_PARTICIPANT", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $numinscri;
+    private $idParticipant;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="DateSaisie", type="date", nullable=false)
+     * @ORM\Column(name="NUMINSCRIPTION", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $datesaisie;
+    private $numinscription;
 
     /**
-     * @var \App\Entity\Participant
+     * @var \DateTime|null
      *
-     * @ORM\ManyToOne(targetEntity="Participant")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_ParticiP", referencedColumnName="ID_Participants")
-     * })
+     * @ORM\Column(name="DATEINSCRIPTION", type="date", nullable=true)
      */
-    private $idParticip;
+    private $dateinscription;
 
     /**
-     * @var \App\Entity\Hackathon
+     * @var string|null
      *
-     * @ORM\ManyToOne(targetEntity="Hackathon")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_HackaP", referencedColumnName="ID_Hackathon")
-     * })
+     * @ORM\Column(name="DESCRIPTION", type="string", length=255, nullable=true, options={"fixed"=true})
      */
-    private $idHackap;
+    private $description;
 
-    public function getId(): ?int
+    public function getIdHackathon(): ?int
     {
-        return $this->id;
+        return $this->idHackathon;
     }
 
-    public function getNuminscri(): ?int
+    public function setIdHackathon(?int $idHackathon): self
     {
-        return $this->numinscri;
-    }
-
-    public function setNuminscri(int $numinscri): self
-    {
-        $this->numinscri = $numinscri;
+        $this->idHackathon = $idHackathon;
 
         return $this;
     }
 
-    public function getDatesaisie(): ?\DateTimeInterface
+    public function getIdParticipant(): ?int
     {
-        return $this->datesaisie;
+        return $this->idParticipant;
     }
 
-    public function setDatesaisie(\DateTimeInterface $datesaisie): self
+    public function setIdParticipant(?int $idParticipant): self
     {
-        $this->datesaisie = $datesaisie;
+        $this->idParticipant = $idParticipant;
 
         return $this;
     }
 
-    public function getIdParticip(): ?Participant
+    public function getNuminscription(): ?int
     {
-        return $this->idParticip;
+        return $this->numinscription;
     }
 
-    public function setIdParticip(?Participant $idParticip): self
+    public function setNuminscription(?int $numinscription): self
     {
-        $this->idParticip = $idParticip;
+        $this->numinscription = $numinscription;
 
         return $this;
     }
 
-    public function getIdHackap(): ?Hackathon
+    public function getDateinscription(): ?\DateTimeInterface
     {
-        return $this->idHackap;
+        return $this->dateinscription;
     }
 
-    public function setIdHackap(?Hackathon $idHackap): self
+    public function setDateinscription(?\DateTimeInterface $dateinscription): self
     {
-        $this->idHackap = $idHackap;
+        $this->dateinscription = $dateinscription;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

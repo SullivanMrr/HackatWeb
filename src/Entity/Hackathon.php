@@ -15,86 +15,86 @@ class Hackathon
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_Hackathon", type="integer", nullable=false)
+     * @ORM\Column(name="ID_HACKATHON", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idHackathon;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
-     * @ORM\Column(name="dateDebut", type="date", nullable=false)
+     * @ORM\Column(name="DATEDEBUT", type="date", nullable=true)
      */
     private $datedebut;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="heureDebut", type="time", nullable=true)
+     * @ORM\Column(name="HEUREDEBUT", type="time", nullable=true)
      */
     private $heuredebut;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="dateFin", type="date", nullable=true)
+     * @ORM\Column(name="DATEFIN", type="date", nullable=true)
      */
     private $datefin;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="heureFin", type="time", nullable=true)
+     * @ORM\Column(name="HEUREFIN", type="time", nullable=true)
      */
     private $heurefin;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="lieu", type="string", length=255, nullable=true)
+     * @ORM\Column(name="LIEU", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $lieu;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="rue", type="string", length=255, nullable=true)
+     * @ORM\Column(name="RUE", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $rue;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="ville", type="string", length=255, nullable=true)
+     * @ORM\Column(name="VILLE", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $ville;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="codePostal", type="string", length=5, nullable=true, options={"fixed"=true})
+     * @ORM\Column(name="CP", type="string", length=32, nullable=true, options={"fixed"=true})
      */
-    private $codepostal;
+    private $cp;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="theme", type="string", length=255, nullable=false)
+     * @ORM\Column(name="THEME", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $theme;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="dateLimite", type="date", nullable=true)
+     * @ORM\Column(name="DATELIMITE", type="date", nullable=true)
      */
     private $datelimite;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="nbPlaces", type="integer", nullable=true)
+     * @ORM\Column(name="NBPLACES", type="integer", nullable=true)
      */
     private $nbplaces;
 
@@ -108,7 +108,7 @@ class Hackathon
         return $this->datedebut;
     }
 
-    public function setDatedebut(\DateTimeInterface $datedebut): self
+    public function setDatedebut(?\DateTimeInterface $datedebut): self
     {
         $this->datedebut = $datedebut;
 
@@ -187,14 +187,14 @@ class Hackathon
         return $this;
     }
 
-    public function getCodepostal(): ?string
+    public function getCp(): ?string
     {
-        return $this->codepostal;
+        return $this->cp;
     }
 
-    public function setCodepostal(?string $codepostal): self
+    public function setCp(?string $cp): self
     {
-        $this->codepostal = $codepostal;
+        $this->cp = $cp;
 
         return $this;
     }
@@ -204,7 +204,7 @@ class Hackathon
         return $this->theme;
     }
 
-    public function setTheme(string $theme): self
+    public function setTheme(?string $theme): self
     {
         $this->theme = $theme;
 

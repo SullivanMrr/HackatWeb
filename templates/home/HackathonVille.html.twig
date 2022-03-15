@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<!DOCTYPE html>
+	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<title>Bootstrap Example</title>
@@ -15,29 +15,26 @@
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
 
 
-eqsrdtryttetzeretrt
-	{% for Hackathon in lesHackathons %}
-		<h1>Voici les Hackathons situés à
-			{{Hackathon.ville}}
-		</h1>
-	{% endfor %}
+			<h3 style="text-align:center;">Voici les Hackathons situés à {{app.request.get('ville')}}</h3>
 
-	<div class="row">
-		{% for Hackathon in lesHackathons %}
-			<div class="col-3">
-				<div class="card">
-					<img class="card-img-top" src="https://th.bing.com/th/id/OIP.AXF8IYKqC3Y7JxYRaUrCPQHaEK?pid=ImgDet&rs=1" alt="Card image cap">
-					<div class="card-body">
-						<h5 class="card-title">{{Hackathon.theme}}</h5>
-						<h5 class="card-title">{{Hackathon.ville}}</h5>
-						<p class="card-text">Cliquez sur le bouton "En savoir plus" pour afficher toutes les informations concernant ce hackathons</p>
-						<a href="{{path('ListeUnHack', {'id':Hackathon.idHackathon})}}" class="btn btn-primary">En savoir plus</a>
+			<div class="row" style="text-align:center;">
+				{% for Hackathon in lesHackathons %}
+					<div class="col-3" style="left: 10%;">
+						<div class="card">
+							<img class="card-img-top" src="https://th.bing.com/th/id/OIP.AXF8IYKqC3Y7JxYRaUrCPQHaEK?pid=ImgDet&rs=1" alt="Card image cap">
+							<div class="card-body">
+								<h5 class="card-title">{{Hackathon.theme}}</h5>
+								<h5 class="card-title">{{Hackathon.ville}}</h5>
+								<p class="card-text">Cliquez sur le bouton "En savoir plus" pour afficher toutes les informations concernant ce hackathons</p>
+								<a href="{{path('ListeUnHack', {'id':Hackathon.idHackathon})}}" class="btn btn-primary">En savoir plus</a>
+							</div>
+						</div>
 					</div>
-				</div>
+				{% endfor %}
 			</div>
-		{% endfor %}
-	</div>
-qserdtfyuioo
-	{% include 'footer.html.twig' %}
 
-{% endblock %}
+			{% include 'footer.html.twig' %}
+
+		{% endblock %}
+	</head>
+</html>

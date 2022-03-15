@@ -19,6 +19,24 @@ class HackatonRepository extends ServiceEntityRepository
         parent::__construct($registry, Hackathon::class);
     }
 
+    public function distinctVille(){
+        $query = $this->createQueryBuilder('h')
+        ->select('h.ville')
+        ->groupBy('h.ville')
+        ->getQuery()
+        ;
+        $distinct = $query->getResult();
+        return $distinct;
+    }
+
+    public function getParticiperHackathon($id){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery('SELECT h from App\entity\Hackathon h JOIN App\Entity\Participer p WITH p.idHackathon = h.idHackathon WHERE p.idParticipant = :id')
+        ->setParameter('id', $id);
+        $participer = $query->getResult();
+        return $participer;
+    }
+
     // /**
     //  * @return Hackathon[] Returns an array of Hackathon objects
     //  */

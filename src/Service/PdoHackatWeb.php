@@ -3,7 +3,10 @@ namespace App\Service;
 
 use App\Entity\Hackathon;
 use App\Entity\Initiation;
+use App\Entity\Participant;
+use DateTime;
 use PDO;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PdoHackatWeb 
 {
@@ -44,7 +47,7 @@ class PdoHackatWeb
     }
 
     public function getLesVilles(){
-        $req =  PdoHackatWeb::$monPdo->prepare("select distinct (ville) from Hackathon where ville IS NOT NULL");
+    $req =  PdoHackatWeb::$monPdo->prepare("select distinct ville from Hackathon where ville IS NOT NULL GROUP BY ville");
 		$req->execute(); 
 		$lesVilles = $req->fetchAll();
 		$villes = [];
@@ -58,12 +61,30 @@ class PdoHackatWeb
 
     public function setUser($user){
         
-        $req =  PdoHackatWeb::$monPdo->prepare("insert into participant(Mail, Password) values(:mail, :password)");
+        $req =  PdoHackatWeb::$monPdo->prepare("insert into participant(Nom, Prenom, Mail, Password, dateNaiss, Portfolio, numTel) values(:nom, :prenom, :mail, :password, :dateNaiss, :portfolio, :numTel)");
+        $req->bindValue(':nom', $user['nom']);
+        $req->bindValue(':prenom', $user['prenom']);
         $req->bindValue(':mail', $user['mail']);
         $req->bindValue(':password', $user['password']);
-        dump($req);
+        $req->bindValue(':dateNaiss', $user['dateNaiss']);
+        $req->bindValue(':portfolio', $user['portfolio']);
+        $req->bindValue(':numTel', $user['numTel']);
 		$req->execute();
     }
+
+    public function setParticiper($user){
+
+      $req =  PdoHackatWeb::$monPdo->prepare("insert into participer(ID_HACKATHON, ID_PARTICIPANT, DATEINSCRIPTION, DESCRIPTION) values(:ID_HACKATHON, :ID_PARTICIPANT, :DATEINSCRIPTION, :DESCRIPTION)");
+      $req->bindValue(':ID_HACKATHON', $user['ID_HACKATHON']);
+      $req->bindValue(':ID_PARTICIPANT', 1);
+      $req->bindValue(':DATEINSCRIPTION', $user['DATEINSCRIPTION']);
+      $req->bindValue(':DESCRIPTION', $user['DESCRIPTION']);
+      
+      $req->execute();
+      dump("apres execute");
+      dump($req); 
+
+  }
 
 
     public function setAtelier($user){
@@ -75,7 +96,7 @@ class PdoHackatWeb
   }
 
     public function getLesAteliersHacka($id){
-        $req =  PdoHackatWeb::$monPdo->prepare("select * from evenements Inner join hackathon ON hackathon.ID_hackathon = evenements.ID_HackaE where ID_HackaE= :id");
+        $req =  PdoHackatWeb::$monPdo->prepare("select * from evenements Inner join hackathon ON hackathon.ID_hackathon = evenements.ID_HACKATHON where ID_HACKATHON= :id");
 		$req->bindValue(':id', $id);
         $req->execute(); 
 		$lesLignes = $req->fetchAll();

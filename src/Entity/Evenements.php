@@ -7,68 +7,77 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Evenements
  *
- * @ORM\Table(name="evenements", indexes={@ORM\Index(name="ID_HackaE", columns={"ID_HackaE"})})
- * @ORM\Entity
+ * @ORM\Table(name="evenements", indexes={@ORM\Index(name="I_FK_EVENEMENTS_HACKATHON", columns={"ID_HACKATHON"})})
+ * @ORM\Entity(repositoryClass="App\Repository\EvenementsRepository")
  */
 class Evenements
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_Evenemnts", type="integer", nullable=false)
+     * @ORM\Column(name="ID_EVENEMENT", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idEvenemnts;
+    private $idEvenement;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ID_HACKATHON", type="integer", nullable=false)
+     */
+    private $idHackathon;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Libelle", type="string", length=50, nullable=true)
+     * @ORM\Column(name="LIBELLE", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $libelle;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="DateEven", type="date", nullable=true)
+     * @ORM\Column(name="DATE", type="date", nullable=true)
      */
-    private $dateeven;
+    private $date;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="Heure", type="time", nullable=true)
+     * @ORM\Column(name="HEURE", type="time", nullable=true)
      */
     private $heure;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="Duree", type="time", nullable=true)
+     * @ORM\Column(name="DUREE", type="time", nullable=true)
      */
     private $duree;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Salle", type="string", length=50, nullable=true)
+     * @ORM\Column(name="SALLE", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $salle;
 
-    /**
-     * @var \App\Entity\Hackathon
-     *
-     * @ORM\ManyToOne(targetEntity="Hackathon")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_HackaE", referencedColumnName="ID_Hackathon")
-     * })
-     */
-    private $idHackae;
-
-    public function getIdEvenemnts(): ?int
+    public function getIdEvenement(): ?int
     {
-        return $this->idEvenemnts;
+        return $this->idEvenement;
+    }
+
+    public function getIdHackathon(): ?int
+    {
+        return $this->idHackathon;
+    }
+
+    public function setIdHackathon(int $idHackathon): self
+    {
+        $this->idHackathon = $idHackathon;
+
+        return $this;
     }
 
     public function getLibelle(): ?string
@@ -83,14 +92,14 @@ class Evenements
         return $this;
     }
 
-    public function getDateeven(): ?\DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->dateeven;
+        return $this->date;
     }
 
-    public function setDateeven(?\DateTimeInterface $dateeven): self
+    public function setDate(?\DateTimeInterface $date): self
     {
-        $this->dateeven = $dateeven;
+        $this->date = $date;
 
         return $this;
     }
@@ -127,18 +136,6 @@ class Evenements
     public function setSalle(?string $salle): self
     {
         $this->salle = $salle;
-
-        return $this;
-    }
-
-    public function getIdHackae(): ?Hackathon
-    {
-        return $this->idHackae;
-    }
-
-    public function setIdHackae(?Hackathon $idHackae): self
-    {
-        $this->idHackae = $idHackae;
 
         return $this;
     }

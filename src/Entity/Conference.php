@@ -2,77 +2,78 @@
 
 namespace App\Entity;
 
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Conference
  *
  * @ORM\Table(name="conference")
- * @ORM\Entity(repositoryClass=App\Repository\ConferenceRepository::class)
+ * @ORM\Entity
  */
 class Conference
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="ID_EVENEMENT", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idEvenement;
+
+    /**
      * @var string|null
      *
-     * @ORM\Column(name="Theme", type="string", length=50, nullable=true)
+     * @ORM\Column(name="THEME", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $theme;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Intervenant", type="string", length=50, nullable=true)
+     * @ORM\Column(name="INTERVENANT", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $intervenant;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Libelle", type="string", length=50, nullable=true)
+     * @ORM\Column(name="LIBELLE", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $libelle;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="DateEven", type="date", nullable=true)
+     * @ORM\Column(name="DATE", type="date", nullable=true)
      */
-    private $dateeven;
+    private $date;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="Heure", type="time", nullable=true)
+     * @ORM\Column(name="HEURE", type="time", nullable=true)
      */
     private $heure;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="Duree", type="time", nullable=true)
+     * @ORM\Column(name="DUREE", type="time", nullable=true)
      */
     private $duree;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Salle", type="string", length=50, nullable=true)
+     * @ORM\Column(name="SALLE", type="string", length=32, nullable=true, options={"fixed"=true})
      */
     private $salle;
 
-    /**
-     * @var \App\Entity\Evenements
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Evenements")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID", referencedColumnName="ID_Evenemnts")
-     * })
-     */
-    private $id;
+    public function getIdEvenement(): ?int
+    {
+        return $this->idEvenement;
+    }
 
     public function getTheme(): ?string
     {
@@ -110,14 +111,14 @@ class Conference
         return $this;
     }
 
-    public function getDateeven(): ?\DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->dateeven;
+        return $this->date;
     }
 
-    public function setDateeven(?\DateTimeInterface $dateeven): self
+    public function setDate(?\DateTimeInterface $date): self
     {
-        $this->dateeven = $dateeven;
+        $this->date = $date;
 
         return $this;
     }
@@ -154,18 +155,6 @@ class Conference
     public function setSalle(?string $salle): self
     {
         $this->salle = $salle;
-
-        return $this;
-    }
-
-    public function getId(): ?Evenements
-    {
-        return $this->id;
-    }
-
-    public function setId(?Evenements $id): self
-    {
-        $this->id = $id;
 
         return $this;
     }
