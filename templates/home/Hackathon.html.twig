@@ -10,9 +10,16 @@
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 			<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+
 		</head>
+
+		{% block javascripts %}
+			<script type="text/javascript" src="{{ asset('js/favoris.js') }}"></script>
+		{% endblock %}
+
 		<style>
 
 			.card {
@@ -28,16 +35,16 @@
 		</style>
 		<body>
 			{% for message in app.flashes('success') %}
-				<div class="alert alert-success" style= "text-align:center;">
+				<div class="alert alert-success" style="text-align:center;">
 					{{ message }}
 				</div>
 			{% endfor %}
 			{% for message in app.flashes('error') %}
-				<div class="alert alert-danger" style= "text-align:center;">
+				<div class="alert alert-danger" style="text-align:center;">
 					{{ message }}
 				</div>
 			{% endfor %}
-			<div class="dropdown" style="left: 5%; bottom: 15%; padding: 10px;">
+			<div class="dropdown" style="bottom: 15%; padding: 10px;">
 				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 					Ville
 				</button>
@@ -64,17 +71,31 @@
 								<h5 class="card-title" id="datelimite">{{Hackathon.datelimite|date('d/m/y')}}</h5>
 								Places restantes :<h5 class="card-title" id="nbplaces">{{Hackathon.nbplaces}}</h5>
 								<p class="card-text">Cliquez sur le bouton "En savoir plus" pour afficher toutes les informations concernant ce Hackathon</p>
-								<a href="{{path('ListeUnHack', {'id':Hackathon.idHackathon})}}" class="btn btn-primary">En savoir plus</a>
+								<a href="{{path ('ListeUnHack', {'id':Hackathon.idHackathon})}}" class="btn btn-primary">En savoir plus</a>
+								<div>
+									{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+										{% set favoris = false %}
+										{% for Favoris in unFavoris %}
+											{% if Favoris.idHackathon == Hackathon.idHackathon %}
+												{% set favoris = true %}
+											{% endif %}
+										{% endfor %}
+										{% if favoris == true %}
+											<a class="favoris" style="color: orange;" href="{{path ('hackathonFavoris', {'id':Hackathon.idHackathon})}}">
+												<i class="fa fa-star-o" style="font-size:36px; cursor:pointer; margin-left:90%;"></i>
+											</a>
+										{% else %}
+											<a class="favoris" href="{{path ('hackathonFavoris', {'id':Hackathon.idHackathon})}}">
+												<i class="fa fa-star-o" style="font-size:36px; cursor:pointer; margin-left:90%;"></i>
+											</a>
+										{% endif %}
+									{% endif %}
+								</div>
 							</div>
 						</div>
 					</div>
 				{% endfor %}
 			</div>
-		</div>
-
-
-		{% include 'footer.html.twig' %}
-
-	{% endblock %}
-
-</html>
+		</html>
+	</html>
+</html></div>{% include 'footer.html.twig' %}{% endblock %}</html></html>

@@ -48,9 +48,7 @@ class ApiController extends AbstractController
 
             ];
         }
-        dump($tabJSON);
         $var = new JsonResponse($tabJSON);
-        dump($var);
         return $var;
     }
 

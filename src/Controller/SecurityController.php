@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Hackathon;
 use App\Entity\Participant;
+use App\Repository\HackathonFavorisRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,15 +43,10 @@ class SecurityController extends AbstractController
          * @Route("/profil", name="profil")
          */
         public function profil(HackatonRepository $hackatonRepository)
-        {       
+        {
                 $id = $this->getUser()->getId();
                 $lesHackathons = $hackatonRepository->getParticiperHackathon($id);
-                if ($lesHackathons == null) {
-                        $this->addFlash('error', "Vous êtes inscrit à aucun hackathon");
-                        return $this->render('security/profil.html.twig', ['lesHackathons' => $lesHackathons]);
-                } else {
-                        $this->addFlash('success', "Vous êtes inscrit à :");
-                        return $this->render('security/profil.html.twig', ['lesHackathons' => $lesHackathons]);
-                }
+                $lesFavoris = $hackatonRepository->getFavoris($id);
+                return $this->render('security/profil.html.twig', ['lesHackathons' => $lesHackathons, 'lesFavoris' => $lesFavoris]);
         }
 }

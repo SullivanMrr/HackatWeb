@@ -27,12 +27,12 @@ class RegistrationFormType extends AbstractType
             ->add('Nom')
             ->add('mail', EmailType::class, [
                 'constraints' => [
-                    new Email(['message' => 'Please enter a valid email address.'])
+                    new Email(['message' => 'Veuillez entrez une adresse email valide.'])
                 ]
              ])
             ->add('Password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'Le mot de passe est différent du précédent.',
                 'required' => true,
                 'first_options'  => ['label' => 'Mot de Passe: '],
                 'second_options' => ['label' => 'Répéter le mot de passe: '],
@@ -41,11 +41,11 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Veuillez entrez un mot de passe.',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' => 'Le mot de passe doit comporter {{ limit }} caractères.',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),

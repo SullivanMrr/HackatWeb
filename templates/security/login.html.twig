@@ -3,7 +3,7 @@
 	<div class="card" style="width: 15%;text-align:center; margin-left:42%;margin-bottom: 5%;margin-top: 5%">
 		<h1 style="text-align:center;">Connexion</h1>
                 {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey }}</div>
+                    <div class="alert alert-danger">L'email ou le mot de passe est incorrect</div>
                 {% endif %}
 		<form action="{{ path('security_login') }}" method="post">
 			<label for="username">Email:</label>

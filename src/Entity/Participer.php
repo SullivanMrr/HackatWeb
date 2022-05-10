@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Participer
  *
- * @ORM\Table(name="participer", indexes={@ORM\Index(name="I_FK_PARTICIPER_HACKATHON", columns={"ID_HACKATHON"}), @ORM\Index(name="I_FK_PARTICIPER_PARTICIPANT", columns={"ID_PARTICIPANT"})})
+ * @ORM\Table(name="participer", indexes={@ORM\Index(name="I_FK_PARTICIPER_PARTICIPANT", columns={"ID_PARTICIPANT"}), @ORM\Index(name="I_FK_PARTICIPER_HACKATHON", columns={"ID_HACKATHON"})})
  * @ORM\Entity
  */
 class Participer
@@ -16,7 +16,6 @@ class Participer
      * @var int
      *
      * @ORM\Column(name="ID_HACKATHON", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $idHackathon;
 
@@ -24,7 +23,6 @@ class Participer
      * @var int
      *
      * @ORM\Column(name="ID_PARTICIPANT", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idParticipant;
 
@@ -56,7 +54,7 @@ class Participer
         return $this->idHackathon;
     }
 
-    public function setIdHackathon(?int $idHackathon): self
+    public function setIdHackathon(int $idHackathon): self
     {
         $this->idHackathon = $idHackathon;
 
@@ -68,7 +66,7 @@ class Participer
         return $this->idParticipant;
     }
 
-    public function setIdParticipant(?int $idParticipant): self
+    public function setIdParticipant(int $idParticipant): self
     {
         $this->idParticipant = $idParticipant;
 
@@ -78,13 +76,6 @@ class Participer
     public function getNuminscription(): ?int
     {
         return $this->numinscription;
-    }
-
-    public function setNuminscription(?int $numinscription): self
-    {
-        $this->numinscription = $numinscription;
-
-        return $this;
     }
 
     public function getDateinscription(): ?\DateTimeInterface

@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Entity\Conference;
 use App\Entity\Evenements;
 use App\Entity\Hackathon;
-use App\Entity\Initiation;
+use App\Entity\HackathonFavoris;
 use App\Entity\Participant;
 use App\Entity\Participer;
 use App\Form\RegistrationFormType;
-use App\Repository\HackatonRepository;
+use App\Repository\HackathonFavorisRepository;
+use App\Repository\HackathonRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,15 +33,18 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/Hackaton", name="ListeHack")
+     * @Route("/Hackathon", name="ListeHack")
      */
 
-    public function Afficherhack(HackatonRepository $hackatonRepository)
+    public function Afficherhack(HackathonRepository $hackathonRepository)
     {
         $repository = $this->getDoctrine()->getRepository(Hackathon::class);
+        $FavorisRepository = $this->getDoctrine()->getRepository(HackathonFavoris::class);
         $lesHackathons = $repository->findAll();
-        $lesVilles = $hackatonRepository->distinctVille();
-        return $this->render('home/Hackathon.html.twig', ['lesHackathons' => $lesHackathons, 'lesVilles' => $lesVilles]);
+        $lesVilles = $hackathonRepository->distinctVille();
+
+        $favoris = $FavorisRepository->findBy(['idParticipant' => $this->getUser()]);
+        return $this->render('home/Hackathon.html.twig', ['lesHackathons' => $lesHackathons, 'lesVilles' => $lesVilles, 'unFavoris' => $favoris]);
     }
     /**
      * @Route("/Hackathon/{id}", name="ListeUnHack")
@@ -176,11 +180,11 @@ class HomeController extends AbstractController
             $this->addFlash('error', "Vous êtes déjà inscrit à cet Hackathon !");
             return $this->redirectToRoute('ListeHack');
         } elseif (empty($_POST['description'])) {
-            
+
             $this->addFlash('error', "Vous devez remplir le champ description");
             return $this->redirectToRoute('ListeHack');
         } else {
-            
+
             $entityManager = $this->getDoctrine()->getManager();
 
             $participer = new Participer();
@@ -189,8 +193,8 @@ class HomeController extends AbstractController
             $participer->setIdHackathon($leHackathon->getIdHackathon());
             $participer->setDateinscription(new DateTime('now'));
             $participer->setDescription($_POST['description']);
-            
-            
+
+
             // $participer->setNuminscri($numInscri);
 
             $leHackathon->setNbPlaces($leHackathon->getNbPlaces() - 1);
@@ -208,5 +212,28 @@ class HomeController extends AbstractController
 
 
         return $this->render('home/InscriptionHackathon.html.twig', ['Hackathon' => $leHackathon]);
+    }
+
+
+    /**
+     * @Route("/listeHackathon/{id}/favoris", name="hackathonFavoris")
+     */
+
+    public function favoris($id): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(HackathonFavoris::class);
+        $leFavori = $repository->findOneBy(['idHackathon' => $id, 'idParticipant' => $this->getUser()->getUserIdentifier()]);
+        if ($leFavori == null) {
+            $favoris = new HackathonFavoris;
+            $favoris->setIdHackathon($id);
+            $favoris->setIdParticipant($this->getUser()->getUserIdentifier());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($favoris);
+        } else {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($leFavori);
+        }
+        $em->flush();
+        return $this->redirectToRoute('ListeHack');
     }
 }
